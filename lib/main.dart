@@ -46,8 +46,9 @@ class _MyHomePageState extends State<MyHomePage> {
       padding: EdgeInsets.only(top: AppBar().preferredSize.height),
       child: SizedBox(
           width: Get.width,
+          height: (Get.height - AppBar().preferredSize.height) * 0.95,
           child: Padding(
-            padding: const EdgeInsets.all(32.0),
+            padding: const EdgeInsets.symmetric(horizontal: 32.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,27 +74,98 @@ class _MyHomePageState extends State<MyHomePage> {
                         })
                   ],
                 ),
+                const SizedBox(height: 8.0),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Obx(() {
-                          if (songController.isLoading.value) {
-                            return const Center(child: CircularProgressIndicator());
-                          } else {
-                            List<Song> songs =
-                                (songController.responseJson.value['results'] as List)
-                                    .map((itemJson) => Song.fromJson(itemJson))
-                                    .toList();
-                            if (songs.length==0) return Center(child: const Text('no song found.'));
-                            List<Widget> widgets = songs.map((song) => Text(song.trackName??'')).toList();
-                            return Column(children: widgets);
-                          }
-                        }),
-                      ],
-                    ),
-                  ),
+                  child: Obx(() {
+                    if (songController.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      List<Song> songs =
+                          (songController.responseJson.value['results'] as List)
+                              .map((itemJson) => Song.fromJson(itemJson))
+                              .toList();
+                      if (songs.isEmpty) {
+                        return const Center(
+                            child: Text('Sorry, no song found.'));
+                      }
+                      List<Widget> widgets = songs
+                          .map((song) => Card(
+                              elevation: 2,
+                              color: Colors.white,
+                              margin: const EdgeInsets.all(8.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20.0, 25.0, 20.0, 25.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      child: SizedBox(
+                                        width: 80,
+                                        height: 80,
+                                        child: song.artworkUrl100 != null
+                                            ? Image.network(
+                                          song.artworkUrl100!,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) => Image.asset(
+                                            'assets/no_artwork_available.png',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                            : Image.asset(
+                                          'assets/no_artwork_available.png',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 15.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            song.trackName ?? 'Unknown Track',
+                                            style: Theme.of(context).textTheme.subtitle1,
+                                            textScaleFactor: 1.1,
+                                          ),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(song.artistName ?? 'Unknown Artist',
+                                              style: Theme.of(context).textTheme.bodyText2),
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(song.collectionName ?? 'Unknown Album',
+                                              style: Theme.of(context).textTheme.caption),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: const [
+                                      SizedBox(width: 20.0),
+                                      Padding(
+                                        padding: EdgeInsets.only(right: 20.0),
+                                        child: Icon(
+                                          Icons.play_arrow,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )))
+                          .toList();
+                      return SingleChildScrollView(
+                          child: Column(children: widgets));
+                    }
+                  }),
                 ),
               ],
             ),
