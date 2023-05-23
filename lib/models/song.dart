@@ -4,10 +4,14 @@ part 'song.g.dart';
 
 @JsonSerializable()
 class Song{
-  Song(this.trackId, this.trackName, this.collectionName);
-  int trackId;
-  String trackName;
-  String collectionName;
+  Song(this.trackId, this.artistName, this.trackName, this.collectionName, this.previewUrl, this.artworkUrl100, this.releaseDate);
+  int? trackId;
+  String? artistName;
+  String? trackName;
+  String? collectionName;
+  String? previewUrl;
+  String? artworkUrl100;
+  String? releaseDate;
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
