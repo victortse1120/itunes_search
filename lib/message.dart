@@ -4,9 +4,11 @@ class Messages extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
     'en_US': {
+      'language': 'Language',
       'search': 'Search',
     },
-    'hk_CN': {
+    'zh_HK': {
+      'language': '語言',
       'search': '搜尋',
     }
   };
