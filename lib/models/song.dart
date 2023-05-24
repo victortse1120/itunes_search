@@ -4,7 +4,7 @@ part 'song.g.dart';
 
 @JsonSerializable()
 class Song{
-  Song(this.trackId, this.artistName, this.trackName, this.collectionName, this.previewUrl, this.artworkUrl100, this.releaseDate);
+  Song({this.trackId, this.artistName, this.trackName, this.collectionName, this.previewUrl, this.artworkUrl100, this.releaseDate});
   int? trackId;
   String? artistName;
   String? trackName;

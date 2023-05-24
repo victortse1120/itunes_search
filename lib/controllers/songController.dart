@@ -1,16 +1,18 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 
+import '../models/song.dart';
+
 class SongController extends GetxController {
-  var isLoading = true.obs;
-  var responseJson = {}.obs;
+  var isLoading = false.obs;
+  var isInit = true.obs;
+  var songList = [].obs;
 
   var isPlaying = false.obs;
-  var songPlaying = 0.obs;
+  var songPlaying = Song().obs;
   var audioPlayer = AudioPlayer();
 
   @override
@@ -31,26 +33,53 @@ class SongController extends GetxController {
 
   void fetchSongs(String term) async {
     try {
+      isInit(false);
       isLoading(true);
       var response = await http.get(Uri.parse('https://itunes.apple.com/search?term=$term&attribute=artistTerm'));
-      responseJson.value = json.decode(response.body.toString());
+      var responseJson = json.decode(response.body.toString());
+      songList.value = (responseJson['results'] as List)
+          .map((itemJson) => Song.fromJson(itemJson))
+          .toList();
     } finally {
       isLoading(false);
     }
   }
 
-  void playSong(String url, int trackId) async {
-    if (songPlaying.value != trackId) {
-      songPlaying.value = trackId;
+  Future<void> playSong(Song song) async {
+    if (songPlaying.value.trackId != song.trackId) {
+      songPlaying(song);
       await audioPlayer.stop();
-      await audioPlayer.setUrl(url);
-      await audioPlayer.play();
+      await audioPlayer.setUrl(song.previewUrl!);
+      audioPlayer.play();
     } else {
       if (isPlaying.value) {
         await audioPlayer.pause();
+      } else if (audioPlayer.processingState == ProcessingState.completed) {
+        await audioPlayer.seek(const Duration(seconds: 0));
+        audioPlayer.play();
       } else {
-        await audioPlayer.play();
+        audioPlayer.play();
       }
+    }
+  }
+
+  void prevSong() async {
+    int songIndex = songList.indexWhere((song) => song.trackId == songPlaying.value.trackId);
+    if (songIndex == 0) {
+      await audioPlayer.seek(const Duration(seconds: 0));
+      audioPlayer.play();
+    } else {
+      playSong(songList[songIndex-1]);
+    }
+  }
+
+  void nextSong() async {
+    int songIndex = songList.indexWhere((song) => song.trackId == songPlaying.value.trackId);
+    if (songIndex == songList.length-1) {
+      playSong(songList[0]);
+      audioPlayer.play();
+    } else {
+      playSong(songList[songIndex+1]);
     }
   }
 }

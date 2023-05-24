@@ -7,13 +7,13 @@ part of 'song.dart';
 // **************************************************************************
 
 Song _$SongFromJson(Map<String, dynamic> json) => Song(
-      json['trackId'] as int?,
-      json['artistName'] as String?,
-      json['trackName'] as String?,
-      json['collectionName'] as String?,
-      json['previewUrl'] as String?,
-      json['artworkUrl100'] as String?,
-      json['releaseDate'] as String?,
+      trackId: json['trackId'] as int?,
+      artistName: json['artistName'] as String?,
+      trackName: json['trackName'] as String?,
+      collectionName: json['collectionName'] as String?,
+      previewUrl: json['previewUrl'] as String?,
+      artworkUrl100: json['artworkUrl100'] as String?,
+      releaseDate: json['releaseDate'] as String?,
     );
 
 Map<String, dynamic> _$SongToJson(Song instance) => <String, dynamic>{
