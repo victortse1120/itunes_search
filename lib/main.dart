@@ -91,8 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       List<Widget> widgets = songs
                           .map((song) => GestureDetector(
                         onTap: () {
-                          songController.isPlaying.value ? songController.pauseSong()
-                           : songController.playSong(song.previewUrl!);
+                          songController.playSong(song.previewUrl!, song.trackId!);
                         },
                             child: Card(
                                 elevation: 2,
@@ -158,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         Padding(
                                           padding: const EdgeInsets.only(right: 20.0),
                                           child: Icon(
-                                            songController.isPlaying.value ? Icons.play_arrow : Icons.pause,
+                                            songController.songPlaying.value == song.trackId ? (songController.isPlaying.value ? Icons.pause : Icons.play_arrow) : Icons.play_arrow,
                                             color: Colors.black,
                                           ),
                                         ),
