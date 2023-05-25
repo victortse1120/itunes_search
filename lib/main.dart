@@ -78,24 +78,77 @@ class _MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        flex: 9,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.6,
                         child: TextFormField(
                           controller: searchController,
+                          textAlign: TextAlign.start,
+                          decoration: InputDecoration(
+                            focusColor: Colors.transparent,
+                            fillColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            contentPadding: const EdgeInsets.all(8.0),
+                            counter: Container(),
+                            border: const OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.grey),
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8.0),
+                                    bottomLeft: Radius.circular(8.0))),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.grey[700]!),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(8.0),
+                                    bottomLeft: Radius.circular(8.0))),
+                          ),
+                          style: Theme.of(context).textTheme.button,
+                          keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
-                        ),
-                      ),
-                      IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: () {
+                          maxLines: 1,
+                          onFieldSubmitted: (value) {
                             if (searchController.text.isNotEmpty) {
                               songController
                                   .fetchSongs(searchController.text);
                             }
-                          })
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: 48.0,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                if (searchController.text.isNotEmpty) {
+                                  songController
+                                      .fetchSongs(searchController.text);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                padding: EdgeInsets.zero,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8.0),
+                                    bottomRight: Radius.circular(8.0),
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text('搜尋',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white, height: 1.0)),
+                                  Icon(Icons.search, size: 16.0,)
+                                ],
+                              )),
+                        ),
+                      )
                     ],
                   ),
                 ),
