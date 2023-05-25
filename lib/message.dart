@@ -6,10 +6,12 @@ class Messages extends Translations {
     'en_US': {
       'language': 'Language',
       'search': 'Search',
+      'no song': 'Sorry, no song found.'
     },
     'zh_HK': {
       'language': '語言',
       'search': '搜尋',
+      'no song': '抱歉，找不到歌曲'
     }
   };
 }
