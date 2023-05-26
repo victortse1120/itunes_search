@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 
 import '../models/song.dart';
 
-class SongController extends GetxController {
+class SongController extends GetxController{
   var isLoading = false.obs;
   var isInit = true.obs;
   var songList = [].obs;
@@ -15,6 +17,8 @@ class SongController extends GetxController {
   var songPlaying = Song().obs;
   var audioPlayer = AudioPlayer();
 
+  var animationController;
+
   @override
   void onInit() {
     super.onInit();
@@ -22,13 +26,22 @@ class SongController extends GetxController {
       if (state.playing) {
         if (state.processingState == ProcessingState.completed) {
           isPlaying(false);
+          animationController.stop();
         } else {
           isPlaying(true);
         }
       } else {
         isPlaying(false);
+        animationController.stop();
       }
     });
+  }
+
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   void fetchSongs(String term) async {
@@ -51,14 +64,17 @@ class SongController extends GetxController {
       await audioPlayer.stop();
       await audioPlayer.setUrl(song.previewUrl!);
       audioPlayer.play();
+      animationController.repeat();
     } else {
       if (isPlaying.value) {
         await audioPlayer.pause();
       } else if (audioPlayer.processingState == ProcessingState.completed) {
         await audioPlayer.seek(const Duration(seconds: 0));
         audioPlayer.play();
+        animationController.repeat();
       } else {
         audioPlayer.play();
+        animationController.repeat();
       }
     }
   }
@@ -81,5 +97,9 @@ class SongController extends GetxController {
     } else {
       playSong(songList[songIndex+1]);
     }
+  }
+
+  void initAnimationController(TickerProvider tickerProvider) {
+    animationController = AnimationController(vsync: tickerProvider, duration: Duration(seconds: 10));
   }
 }
