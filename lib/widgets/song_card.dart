@@ -64,11 +64,11 @@ class SongCard extends StatelessWidget {
                       children: [
                         Text(
                           song.trackName ??
-                              'Unknown Track',
+                              'unknown track'.tr,
                           style: Theme
                               .of(context)
                               .textTheme
-                              .subtitle1,
+                              .titleMedium,
                           textScaleFactor: 1.1,
                         ),
                         const SizedBox(
@@ -76,21 +76,21 @@ class SongCard extends StatelessWidget {
                         ),
                         Text(
                             song.artistName ??
-                                'Unknown Artist',
+                                'unknown artist'.tr,
                             style: Theme
                                 .of(context)
                                 .textTheme
-                                .bodyText2),
+                                .bodyMedium),
                         const SizedBox(
                           height: 5,
                         ),
                         Text(
                             song.collectionName ??
-                                'Unknown Album',
+                                'unknown album'.tr,
                             style: Theme
                                 .of(context)
                                 .textTheme
-                                .caption),
+                                .bodySmall),
                       ],
                     ),
                   ),

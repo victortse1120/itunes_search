@@ -48,7 +48,7 @@ class SongController extends GetxController{
     try {
       isInit(false);
       isLoading(true);
-      var response = await http.get(Uri.parse('https://itunes.apple.com/search?term=$term&attribute=artistTerm'));
+      var response = await http.get(Uri.parse('https://itunes.apple.com/search?term=$term'));
       var responseJson = json.decode(response.body.toString());
       songList.value = (responseJson['results'] as List)
           .map((itemJson) => Song.fromJson(itemJson))

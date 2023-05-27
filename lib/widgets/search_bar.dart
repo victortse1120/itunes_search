@@ -45,7 +45,7 @@ class SearchBar extends StatelessWidget {
                       topLeft: Radius.circular(8.0),
                       bottomLeft: Radius.circular(8.0))),
             ),
-            style: Theme.of(context).textTheme.button,
+            style: Get.theme.textTheme.labelLarge?.copyWith(color: Colors.black),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
             maxLines: 1,
@@ -83,7 +83,7 @@ class SearchBar extends StatelessWidget {
                   children: [
                     Text('search'.tr,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white, height: 1.0)),
+                        style: Get.theme.textTheme.labelLarge),
                     const Icon(Icons.search, size: 16.0,)
                   ],
                 )),
